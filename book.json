@@ -1,0 +1,51 @@
+{
+    "title": "Vue 源码解读",
+    "description": "记录阅读Vue源码过程中的疑问和收获",
+    "author": "aaron",
+    "output.name": "site",
+    "language": "zh-hans",
+    "gitbook": "3.2.3",
+    "links": {
+        "sidebar": {
+            "Vue 源码解读": "https://github.com/ifengzp/vue-review"
+        }
+    },
+    "structure": {
+        "readme": "introduction.md"
+    },
+    "plugins": [
+        "-highlight",
+        "github@^2.0.0",
+        "github-buttons@2.1.0",
+        "favicon@^0.0.2",
+        "todo@^0.1.3"
+    ],
+    "pluginsConfig": {
+        "theme-default": {
+            "showLevel": false
+        },
+        "github": {
+            "url": "https://github.com/ifengzp/vue-review"
+        },
+        "github-buttons": {
+            "repo": "ifengzp/vue-review",
+            "types": [
+                "star"
+            ],
+            "size": "small"
+        },
+        "sharing": {
+            "weibo": false,
+            "facebook": false,
+            "twitter": false,
+            "google": false,
+            "instapaper": false,
+            "vk": false,
+            "all": []
+        },
+        "favicon": {
+            "shortcut": "favicon.png",
+            "bookmark": "favicon.png"
+        }
+    }
+}
