@@ -4,7 +4,7 @@ var gitalk = new Gitalk({
   "repo": "vue-review",
   "owner": "ifengzp",
   "admin": ["ifengzp"],
-  "id": decodeURI(window.location.pathname),
+  "id": decodeURI(window.location.pathname).replace('/vue-review/', '/'),
   "distractionFreeMode": false
 });
 gitalk.render("gitalk-container");
