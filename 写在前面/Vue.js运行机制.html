@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>依赖收集 · 解读 Vue</title>
+        <title>★ Vue.js运行机制 · 解读 Vue</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -103,10 +103,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../VD与diff/" />
+    <link rel="next" href="目录结构.html" />
     
     
-    <link rel="prev" href="../响应式原理/响应式原理.html" />
+    <link rel="prev" href="常见的MVM实现.html" />
     
 
     
@@ -170,12 +170,51 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="../写在前面/目录结构.html">
+        <li class="chapter " data-level="1.2" data-path="我眼里的Vue.html">
             
-                <a href="../写在前面/目录结构.html">
+                <a href="我眼里的Vue.html">
             
                     
-                    目录结构
+                    我眼里的Vue
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="常见的MVM实现.html">
+            
+                <a href="常见的MVM实现.html">
+            
+                    
+                    MVM(VM)的实现原理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4" data-path="Vue.js运行机制.html">
+            
+                <a href="Vue.js运行机制.html">
+            
+                    
+                    ★ Vue.js运行机制
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="目录结构.html">
+            
+                <a href="目录结构.html">
+            
+                    
+                    源码的目录结构
             
                 </a>
             
@@ -186,16 +225,23 @@
 
     
         
-        <li class="header">第一部分 原理</li>
+        <li class="header">初始化及实例挂载</li>
         
         
     
-        <li class="chapter " data-level="2.1" data-path="../响应式原理/响应式原理.html">
+
+    
+        
+        <li class="header">响应式系统</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../响应式系统/前置知识.html">
             
-                <a href="../响应式原理/响应式原理.html">
+                <a href="../响应式系统/前置知识.html">
             
                     
-                    响应式原理
+                    前置知识
             
                 </a>
             
@@ -203,9 +249,22 @@
             
         </li>
     
-        <li class="chapter active" data-level="2.2" data-path="依赖收集.html">
+        <li class="chapter " data-level="3.2" data-path="../响应式系统/数据劫持.html">
             
-                <a href="依赖收集.html">
+                <a href="../响应式系统/数据劫持.html">
+            
+                    
+                    数据劫持
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../响应式系统/依赖收集.html">
+            
+                <a href="../响应式系统/依赖收集.html">
             
                     
                     依赖收集
@@ -216,37 +275,19 @@
             
         </li>
     
-        <li class="chapter " data-level="2.3" data-path="../VD与diff/">
-            
-                <a href="../VD与diff/">
-            
-                    
-                    Virtual DOM与diff
-            
-                </a>
-            
 
-            
-            <ul class="articles">
-                
     
-        <li class="chapter " data-level="2.3.1" data-path="../VD与diff/VD.html">
-            
-                <a href="../VD与diff/VD.html">
-            
-                    
-                    Virtual DOM
-            
-                </a>
-            
-
-            
-        </li>
+        
+        <li class="header">虚拟DOM及Diff</li>
+        
+        
     
 
-            </ul>
-            
-        </li>
+    
+        
+        <li class="header">模板系统</li>
+        
+        
     
 
     
@@ -278,7 +319,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >依赖收集</a>
+        <a href=".." >★ Vue.js运行机制</a>
     </h1>
 </div>
 
@@ -293,19 +334,12 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <div id="anchor-navigation-ex-navbar"><i class="fa fa-navicon"></i><ul><li><span class="title-icon "></span><a href="#&#x4F9D;&#x8D56;&#x6536;&#x96C6;"><b>1. </b>&#x4F9D;&#x8D56;&#x6536;&#x96C6;</a></li></ul></div><a href="#&#x4F9D;&#x8D56;&#x6536;&#x96C6;" id="anchorNavigationExGoTop"><i class="fa fa-arrow-up"></i></a><h1 id="&#x4F9D;&#x8D56;&#x6536;&#x96C6;"><a name="&#x4F9D;&#x8D56;&#x6536;&#x96C6;" class="anchor-navigation-ex-anchor" href="#&#x4F9D;&#x8D56;&#x6536;&#x96C6;"><i class="fa fa-link" aria-hidden="true"></i></a>1. &#x4F9D;&#x8D56;&#x6536;&#x96C6;</h1>
-<p>&#x8FD9;&#x91CC;&#x662F;&#x4F9D;&#x8D56;&#x6536;&#x96C6; </p>
+                                <div id="anchor-navigation-ex-navbar"><i class="fa fa-navicon"></i><ul><li><span class="title-icon "></span><a href="#vuejs&#x7684;&#x8FD0;&#x884C;&#x673A;&#x5236;"><b>1. </b>Vue.js&#x7684;&#x8FD0;&#x884C;&#x673A;&#x5236;</a></li></ul></div><a href="#vuejs&#x7684;&#x8FD0;&#x884C;&#x673A;&#x5236;" id="anchorNavigationExGoTop"><i class="fa fa-arrow-up"></i></a><h1 id="vuejs&#x7684;&#x8FD0;&#x884C;&#x673A;&#x5236;"><a name="vuejs&#x7684;&#x8FD0;&#x884C;&#x673A;&#x5236;" class="anchor-navigation-ex-anchor" href="#vuejs&#x7684;&#x8FD0;&#x884C;&#x673A;&#x5236;"><i class="fa fa-link" aria-hidden="true"></i></a>1. Vue.js&#x7684;&#x8FD0;&#x884C;&#x673A;&#x5236;</h1>
+<p>&#x6307;&#x5BFC;&#x601D;&#x60F3;&#xFF0C;&#x7167;&#x642C;&#x81EA;&#x793E;&#x533A;&#x1F447;&#xFF1A;
+<img src="Vuejs&#x8FD0;&#x884C;&#x673A;&#x5236;.jpg" alt="Vuejs&#x8FD0;&#x884C;&#x673A;&#x5236;.jpg"></p>
 <footer class="page-footer"><span class="copyright">powered by Gitbook</span><span class="footer-modification">&#x8BE5;&#x6587;&#x4EF6;&#x4FEE;&#x8BA2;&#x65F6;&#x95F4;&#xFF1A;
-2019-07-31 20:06:33
+2019-08-03 14:44:01
 </span></footer>
-
-<link rel="stylesheet" href="https://ifengzp.github.io/vue-review/assets/gitalk/gitalk.css">
-
-<script src="https://ifengzp.github.io/vue-review/assets/gitalk/gitalk.min.js"></script>
-
-<div id="gitalk-container"></div>
-
-<script src="https://ifengzp.github.io/vue-review/assets/gitalk/gitalk-config.js"></script>
                                 
                                 </section>
                             
@@ -332,12 +366,12 @@
 
             
                 
-                <a href="../响应式原理/响应式原理.html" class="navigation navigation-prev " aria-label="Previous page: 响应式原理">
+                <a href="常见的MVM实现.html" class="navigation navigation-prev " aria-label="Previous page: MVM(VM)的实现原理">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="../VD与diff/" class="navigation navigation-next " aria-label="Next page: Virtual DOM与diff">
+                <a href="目录结构.html" class="navigation navigation-next " aria-label="Next page: 源码的目录结构">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -348,7 +382,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"依赖收集","level":"2.2","depth":1,"next":{"title":"Virtual DOM与diff","level":"2.3","depth":1,"path":"VD与diff/index.md","ref":"VD与diff/index.md","articles":[{"title":"Virtual DOM","level":"2.3.1","depth":2,"path":"VD与diff/VD.md","ref":"VD与diff/VD.md","articles":[]}]},"previous":{"title":"响应式原理","level":"2.1","depth":1,"path":"响应式原理/响应式原理.md","ref":"响应式原理/响应式原理.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-plus","-highlight","prism","github@^2.0.0","github-buttons@2.1.0","favicon@^0.0.2","todo@^0.1.3","edit-link@^2.0.2","tbfed-pagefooter@^0.0.1","advanced-emoji","splitter","mermaid-gb3","puml","-sharing","sectionx","anchors","copy-code-button","theme-comscore","expandable-chapters","anchor-navigation-ex"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"prism":{"css":["prismjs/themes/prism-okaidia.css"]},"github":{"url":"https://github.com/ifengzp/vue-review"},"puml":{},"todo":{},"splitter":{},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{"tag":"b"},"mermaid-gb3":{},"anchor-navigation-ex":{"associatedWithSummary":true,"float":{"floatIcon":"fa fa-navicon","level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showGoTop":true,"showLevel":true},"favicon":{"shortcut":"favicon.ico","bookmark":"favicon.ico"},"theme-comscore":{},"github-buttons":{"repo":"ifengzp/vue-review","types":["star"],"size":"small"},"copy-code-button":{},"advanced-emoji":{"embedEmojis":false},"edit-link":{"label":"编辑本页","base":"https://github.com/ifengzp/vue-review/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"aaron","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"解读 Vue","language":"zh-hans","output.name":"site","gitbook":"3.2.3","description":"记录学习Vue和阅读Vue源码过程中的疑问和收获"},"file":{"path":"依赖收集/依赖收集.md","mtime":"2019-07-31T12:06:33.564Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-08-01T15:56:38.726Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"★ Vue.js运行机制","level":"1.4","depth":1,"next":{"title":"源码的目录结构","level":"1.5","depth":1,"path":"写在前面/目录结构.md","ref":"写在前面/目录结构.md","articles":[]},"previous":{"title":"MVM(VM)的实现原理","level":"1.3","depth":1,"path":"写在前面/常见的MVM实现.md","ref":"写在前面/常见的MVM实现.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-plus","-highlight","prism","github@^2.0.0","github-buttons@2.1.0","favicon@^0.0.2","todo@^0.1.3","edit-link@^2.0.2","tbfed-pagefooter@^0.0.1","advanced-emoji","splitter","mermaid-gb3","puml","-sharing","sectionx","anchors","copy-code-button","theme-comscore","expandable-chapters","anchor-navigation-ex","livereload"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"prism":{"css":["prismjs/themes/prism-okaidia.css"]},"github":{"url":"https://github.com/ifengzp/vue-review"},"puml":{},"livereload":{},"todo":{},"splitter":{},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{"tag":"b"},"mermaid-gb3":{},"anchor-navigation-ex":{"associatedWithSummary":true,"float":{"floatIcon":"fa fa-navicon","level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showGoTop":true,"showLevel":true},"favicon":{"shortcut":"favicon.ico","bookmark":"favicon.ico"},"theme-comscore":{},"github-buttons":{"repo":"ifengzp/vue-review","types":["star"],"size":"small"},"copy-code-button":{},"advanced-emoji":{"embedEmojis":false},"edit-link":{"label":"编辑本页","base":"https://github.com/ifengzp/vue-review/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"aaron","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"解读 Vue","language":"zh-hans","output.name":"site","gitbook":"3.2.3","description":"记录学习Vue和阅读Vue源码过程中的疑问和收获"},"file":{"path":"写在前面/Vue.js运行机制.md","mtime":"2019-08-03T06:44:01.226Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-08-03T12:04:30.651Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
@@ -400,6 +434,10 @@
     
         
         <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
         
     
         
