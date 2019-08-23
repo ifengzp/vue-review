@@ -108,8 +108,27 @@ class Mvvm {
     }
 
     compile(dom) {
-        const nodes = dom.childNodes;
-        console.log(nodes)
+        let nodes = dom.childNodes;
+        for(let node of nodes) {
+            const attrs = node.attributes || [];
+            // 解析指令
+            for(const attr of attrs) {
+                switch (attr.name) {
+                    case 'v-model':
+                        node.addEventListener('input', e => this[attr.value] = e.target.value);
+                        break;
+                    case '@click':
+                        node.addEventListener('input', e => this.methods[attr.value].bind(this));
+                        break;
+                }
+            }
+            // 解析模板变量
+            let match = (node.innerText || '').match(/\{\{(.*)\}\}/);
+            if (match) {
+                const name = match[1].trim();
+                console.log(name)
+            }
+        }
     }
 
     observe(data) {
@@ -135,5 +154,4 @@ class Mvvm {
         })
     }
 }
-
 ```
