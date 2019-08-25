@@ -101,57 +101,95 @@ defineReactive(this.data, 'myFriend', '小明')
 
 ```js
 class Mvvm {
-    constructor(options) {
-        const { el, data, methods } = options;
-        this.observe(data);
-        this.compile(document.querySelector(el));
-    }
+  constructor(options) {
+    const { el, data, methods } = options;
+    this.methods = methods;
+		this.observe(data);
+    this.compile(document.querySelector(el));
+  }
 
-    compile(dom) {
-        let nodes = dom.childNodes;
-        for(let node of nodes) {
-            const attrs = node.attributes || [];
-            // 解析指令
-            for(const attr of attrs) {
-                switch (attr.name) {
-                    case 'v-model':
-                        node.addEventListener('input', e => this[attr.value] = e.target.value);
-                        break;
-                    case '@click':
-                        node.addEventListener('input', e => this.methods[attr.value].bind(this));
-                        break;
-                }
-            }
-            // 解析模板变量
-            let match = (node.innerText || '').match(/\{\{(.*)\}\}/);
-            if (match) {
-                const name = match[1].trim();
-                console.log(name)
-            }
-        }
+  observe(data) {
+    for (let key in data) {
+      this.defineReactive(this, key, data[key]);
     }
+  }
 
-    observe(data) {
-        for (let key in data) {
-            this.defineReactive(this, key, data[key]);
+  defineReactive(data, key, value) {
+    let dep = [];
+    Object.defineProperty(data, key, {
+      enumerable: true,
+      configurable: true,
+      get: function() {
+				dep.push(this.target);
+        return value;
+      },
+      set: function(newVal) {
+        if (value === newVal) return;
+				value = newVal;
+        dep.forEach(watcher => {
+					watcher.update(value)
+				});
+      }
+    });
+  }
+
+  compile(dom) {
+    let nodes = dom.childNodes;
+    for (let node of nodes) {
+      const attrs = node.attributes || [];
+      // 解析指令
+      for (const attr of attrs) {
+        switch (attr.name) {
+          case "v-model":
+            node.addEventListener(
+              "input",
+              e => {
+								this[attr.value] = e.target.value
+							}
+            );
+						this.target = new Watcher(node, "input");
+						this[attr.value];
+            break;
+          case "@click":
+            node.addEventListener("click", () =>
+              this.methods[attr.value].call(this)
+            );
+            break;
         }
+      }
+			
+			let match = (node.innerText || "").match(/\{\{(.*)\}\}/);
+			if (match) {
+				const name = match[1].trim();
+				this.target = new Watcher(node, "text");
+				this[name];
+			}
     }
-    
-    defineReactive (data, key, value) {
-        let dep = []; // 依赖列表
-        Object.defineProperty(data, key, {
-            enumerable: true,
-            configurable: true,
-            get: function () {
-                // dep.push(/* 引用了该变量的页面节点 */);
-                return value;
-            },
-            set: function (newVal) {
-                if(value === newVal) return
-                value = newVal
-                // dep.forEach(node => /* 遍历依赖中的元素节点然后渲染 */);
-            }
-        })
+  }
+}
+
+class Watcher {
+  constructor(node, type) {
+    this.node = node;
+		this.type = type;
+		this.template = node.innerText;
+  }
+  update(value) {
+    switch (this.type) {
+      case "input":
+        this.node.value = value;
+        break;
+      case "text":
+        this.node.innerText = this.template.replace(/\{\{(.*)\}\}/g, value);
+        break;
     }
+  }
 }
 ```
+这里有几个个地方要单独说一下：
+- 第一个是抽象了一个`watcher`类，在这个demo里面数据只是被两个标签中的模板变量引用了，但是在`vue`中其实还有用户自身定义的`watch`也会在数据变更的时候触发用户自定义的回调。`Wather`其实扮演的就是一个中介的角色，数据变化的时候只要告诉`watcher`，`watcher`自己去通知引用到这个数据的其他地方。
+- 第二个是`target`的巧妙运用，`compile`去解析模板的时候把获取到每一个依赖赋给一个全局性的`target`，然后去手动调一下触发一下引用变量的`getter`，在`getter`里面接收当前的`target`从而完成整个依赖收集的过程。
+- `Dep`其实应该单独抽象出来，目前还是耦合在一起
+
+经过上面的例子我们就知道了一个核心的MVVM要实现的功能以及核心思路，然后我们再去看Vue的这块响应式的源码就比较有思路了。本节的后面我会参考Vue源码实现一个功能比较完整的MVVM。
+
