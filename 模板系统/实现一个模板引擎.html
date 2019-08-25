@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>依赖收集 · 解读 Vue</title>
+        <title>最小模板系统 · 解读 Vue</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -104,7 +104,7 @@
 
     
     
-    <link rel="prev" href="数据劫持.html" />
+    <link rel="prev" href="../响应式系统/最小mvvm.html" />
     
 
     
@@ -234,9 +234,9 @@
         
         
     
-        <li class="chapter " data-level="3.1" data-path="前置知识.html">
+        <li class="chapter " data-level="3.1" data-path="../响应式系统/前置知识.html">
             
-                <a href="前置知识.html">
+                <a href="../响应式系统/前置知识.html">
             
                     
                     前置知识
@@ -247,25 +247,12 @@
             
         </li>
     
-        <li class="chapter " data-level="3.2" data-path="数据劫持.html">
+        <li class="chapter " data-level="3.2" data-path="../响应式系统/最小mvvm.html">
             
-                <a href="数据劫持.html">
-            
-                    
-                    数据劫持
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter active" data-level="3.3" data-path="依赖收集.html">
-            
-                <a href="依赖收集.html">
+                <a href="../响应式系统/最小mvvm.html">
             
                     
-                    依赖收集
+                    最小mvvm
             
                 </a>
             
@@ -286,6 +273,19 @@
         <li class="header">模板系统</li>
         
         
+    
+        <li class="chapter active" data-level="5.1" data-path="实现一个模板引擎.html">
+            
+                <a href="实现一个模板引擎.html">
+            
+                    
+                    最小模板系统
+            
+                </a>
+            
+
+            
+        </li>
     
 
     
@@ -317,7 +317,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >依赖收集</a>
+        <a href=".." >最小模板系统</a>
     </h1>
 </div>
 
@@ -332,9 +332,16 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <p>&#x4F9D;&#x8D56;&#x6536;&#x96C6; </p>
+                                <div id="anchor-navigation-ex-navbar"><i class="fa fa-navicon"></i><ul><li><span class="title-icon "></span><a href="#&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6A21;&#x677F;&#x5F15;&#x64CE;"><b>1. </b>&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6A21;&#x677F;&#x5F15;&#x64CE;</a></li></ul></div><a href="#&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6A21;&#x677F;&#x5F15;&#x64CE;" id="anchorNavigationExGoTop"><i class="fa fa-arrow-up"></i></a><h1 id="&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6A21;&#x677F;&#x5F15;&#x64CE;"><a name="&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6A21;&#x677F;&#x5F15;&#x64CE;" class="anchor-navigation-ex-anchor" href="#&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6A21;&#x677F;&#x5F15;&#x64CE;"><i class="fa fa-link" aria-hidden="true"></i></a>1. &#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6A21;&#x677F;&#x5F15;&#x64CE;</h1>
+<p>&#x4E00;&#x4E2A;&#x6A21;&#x677F;&#x5F15;&#x64CE;&#x4F1A;&#x6709;&#x4EC0;&#x4E48;&#x529F;&#x80FD;&#xFF1A;</p>
+<ul>
+<li>&#x6A21;&#x677F;&#x83B7;&#x53D6;</li>
+<li>&#x5BF9;&#x6A21;&#x677F;&#x8FDB;&#x884C;&#x53D8;&#x91CF;&#x5206;&#x79BB;</li>
+<li>&#x6A21;&#x677F;&#x6E32;&#x67D3;</li>
+<li>&#x6A21;&#x677F;&#x7F13;&#x5B58;</li>
+</ul>
 <footer class="page-footer"><span class="copyright">powered by Gitbook</span><span class="footer-modification">&#x8BE5;&#x6587;&#x4EF6;&#x4FEE;&#x8BA2;&#x65F6;&#x95F4;&#xFF1A;
-2019-08-03 18:07:06
+2019-08-25 23:44:59
 </span></footer>
 
 <link rel="stylesheet" href="https://ifengzp.github.io/vue-review/assets/gitalk/gitalk.css">
@@ -370,7 +377,7 @@
 
             
                 
-                <a href="数据劫持.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 数据劫持">
+                <a href="../响应式系统/最小mvvm.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 最小mvvm">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
@@ -382,7 +389,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"依赖收集","level":"3.3","depth":1,"previous":{"title":"数据劫持","level":"3.2","depth":1,"path":"响应式系统/数据劫持.md","ref":"响应式系统/数据劫持.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-plus","-highlight","prism","github@^2.0.0","github-buttons@2.1.0","favicon@^0.0.2","todo@^0.1.3","edit-link@^2.0.2","tbfed-pagefooter@^0.0.1","advanced-emoji","splitter","mermaid-gb3","puml","-sharing","sectionx","anchors","copy-code-button","theme-comscore","expandable-chapters","anchor-navigation-ex"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"prism":{"css":["prismjs/themes/prism-okaidia.css"]},"github":{"url":"https://github.com/ifengzp/vue-review"},"puml":{},"todo":{},"splitter":{},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{"tag":"b"},"mermaid-gb3":{},"anchor-navigation-ex":{"associatedWithSummary":true,"float":{"floatIcon":"fa fa-navicon","level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showGoTop":true,"showLevel":true},"favicon":{"shortcut":"favicon.ico","bookmark":"favicon.ico"},"theme-comscore":{},"github-buttons":{"repo":"ifengzp/vue-review","types":["star"],"size":"small"},"copy-code-button":{},"advanced-emoji":{"embedEmojis":false},"edit-link":{"label":"编辑本页","base":"https://github.com/ifengzp/vue-review/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"aaron","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"解读 Vue","language":"zh-hans","output.name":"site","gitbook":"3.2.3","description":"记录学习Vue和阅读Vue源码过程中的疑问和收获"},"file":{"path":"响应式系统/依赖收集.md","mtime":"2019-08-03T10:07:06.712Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-08-04T15:37:03.038Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"最小模板系统","level":"5.1","depth":1,"previous":{"title":"最小mvvm","level":"3.2","depth":1,"path":"响应式系统/最小mvvm.md","ref":"响应式系统/最小mvvm.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-plus","-highlight","prism","github@^2.0.0","github-buttons@2.1.0","favicon@^0.0.2","todo@^0.1.3","edit-link@^2.0.2","tbfed-pagefooter@^0.0.1","advanced-emoji","splitter","mermaid-gb3","puml","-sharing","sectionx","anchors","copy-code-button","theme-comscore","expandable-chapters","anchor-navigation-ex"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"prism":{"css":["prismjs/themes/prism-okaidia.css"]},"github":{"url":"https://github.com/ifengzp/vue-review"},"puml":{},"todo":{},"splitter":{},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{"tag":"b"},"mermaid-gb3":{},"anchor-navigation-ex":{"associatedWithSummary":true,"float":{"floatIcon":"fa fa-navicon","level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showGoTop":true,"showLevel":true},"favicon":{"shortcut":"favicon.ico","bookmark":"favicon.ico"},"theme-comscore":{},"github-buttons":{"repo":"ifengzp/vue-review","types":["star"],"size":"small"},"copy-code-button":{},"advanced-emoji":{"embedEmojis":false},"edit-link":{"label":"编辑本页","base":"https://github.com/ifengzp/vue-review/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"aaron","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"解读 Vue","language":"zh-hans","output.name":"site","gitbook":"3.2.3","description":"记录学习Vue和阅读Vue源码过程中的疑问和收获"},"file":{"path":"模板系统/实现一个模板引擎.md","mtime":"2019-08-25T15:44:59.916Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-08-25T15:55:01.688Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

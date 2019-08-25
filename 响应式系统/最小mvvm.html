@@ -1,0 +1,637 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>最小mvvm · 解读 Vue</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="aaron">
+        
+        
+    
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-plus/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism-okaidia.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-tbfed-pagefooter/footer.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-advanced-emoji/emoji-website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.css">
+                
+            
+                
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-sectionx/sectionx.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-anchors/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-anchor-navigation-ex/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-theme-comscore/test.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+    
+
+        
+    
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../模板系统/实现一个模板引擎.html" />
+    
+    
+    <link rel="prev" href="前置知识.html" />
+    
+
+    
+        <link rel="shortcut icon" href='../favicon.ico' type="image/x-icon">
+    
+    
+        <link rel="bookmark" href='../favicon.ico' type="image/x-icon">
+    
+    
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"repo":"ifengzp/vue-review","types":["star"],"size":"small"};
+    </script>
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">准备工作</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../写在前面/我眼里的Vue.html">
+            
+                <a href="../写在前面/我眼里的Vue.html">
+            
+                    
+                    我眼里的Vue
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../写在前面/常见的MVM实现.html">
+            
+                <a href="../写在前面/常见的MVM实现.html">
+            
+                    
+                    MVM(VM)的实现原理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../写在前面/准备工作.html">
+            
+                <a href="../写在前面/准备工作.html">
+            
+                    
+                    阅读源码前的准备工作
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../写在前面/理解主线.html">
+            
+                <a href="../写在前面/理解主线.html">
+            
+                    
+                    理解主线
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">初始化及实例挂载</li>
+        
+        
+    
+
+    
+        
+        <li class="header">响应式系统</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="前置知识.html">
+            
+                <a href="前置知识.html">
+            
+                    
+                    前置知识
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="3.2" data-path="最小mvvm.html">
+            
+                <a href="最小mvvm.html">
+            
+                    
+                    最小mvvm
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">虚拟DOM及Diff</li>
+        
+        
+    
+
+    
+        
+        <li class="header">模板系统</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../模板系统/实现一个模板引擎.html">
+            
+                <a href="../模板系统/实现一个模板引擎.html">
+            
+                    
+                    最小模板系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本书使用 GitBook 发布
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >最小mvvm</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div class="search-plus" id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <div id="anchor-navigation-ex-navbar"><i class="fa fa-navicon"></i><ul><li><span class="title-icon "></span><a href="#&#x6700;&#x5C0F;mvvm"><b>1. </b>&#x6700;&#x5C0F;mvvm</a></li><ul><li><span class="title-icon "></span><a href="#&#x9996;&#x5148;&#x6211;&#x4EEC;&#x5148;&#x8981;&#x62E6;&#x622A;&#x5230;&#x6570;&#x636E;&#x53D8;&#x5316;"><b>1.1. </b>&#x9996;&#x5148;&#x6211;&#x4EEC;&#x5148;&#x8981;&#x62E6;&#x622A;&#x5230;&#x6570;&#x636E;&#x53D8;&#x5316;</a></li><li><span class="title-icon "></span><a href="#&#x7531;&#x89C6;&#x56FE;&#x89E6;&#x53D1;&#x6570;&#x636E;&#x53D8;&#x66F4;"><b>1.2. </b>&#x7531;&#x89C6;&#x56FE;&#x89E6;&#x53D1;&#x6570;&#x636E;&#x53D8;&#x66F4;</a></li><li><span class="title-icon "></span><a href="#&#x7531;&#x6570;&#x636E;&#x53D8;&#x66F4;&#x89E6;&#x53D1;&#x89C6;&#x56FE;&#x66F4;&#x65B0;"><b>1.3. </b>&#x7531;&#x6570;&#x636E;&#x53D8;&#x66F4;&#x89E6;&#x53D1;&#x89C6;&#x56FE;&#x66F4;&#x65B0;</a></li><li><span class="title-icon "></span><a href="#&#x5B9E;&#x73B0;mvvm&#x7C7B;"><b>1.4. </b>&#x5B9E;&#x73B0;mvvm&#x7C7B;</a></li></ul></ul></div><a href="#&#x6700;&#x5C0F;mvvm" id="anchorNavigationExGoTop"><i class="fa fa-arrow-up"></i></a><h1 id="&#x6700;&#x5C0F;mvvm"><a name="&#x6700;&#x5C0F;mvvm" class="anchor-navigation-ex-anchor" href="#&#x6700;&#x5C0F;mvvm"><i class="fa fa-link" aria-hidden="true"></i></a>1. &#x6700;&#x5C0F;mvvm</h1>
+<p>&#x6211;&#x4EEC;&#x5148;&#x634B;&#x4E00;&#x4E0B;&#x5982;&#x679C;&#x8981;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6700;&#x7B80;&#x5355;&#x7684;&#x53D8;&#x91CF;&#x548C;&#x89C6;&#x56FE;&#x95F4;&#x7684;&#x53CC;&#x5411;&#x7ED1;&#x5B9A;&#x7684;&#x8BDD;&#x9700;&#x8981;&#x8003;&#x8651;&#x54EA;&#x4E9B;&#x4E1C;&#x897F;&#x3002;&#x4ECE;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x4F8B;&#x5B50;&#x5F00;&#x59CB;&#xFF0C;&#x6709;&#x4E00;&#x4E2A;&#x53D8;&#x91CF;&#x53EB;&#x505A;<code>myFriend</code>&#xFF0C;&#x901A;&#x8FC7;&#x8F93;&#x5165;&#x6846;&#x53EF;&#x4EE5;&#x6539;&#x53D8;&#x5B83;&#x7684;&#x503C;&#xFF0C;&#x91CD;&#x7F6E;&#x6309;&#x94AE;&#x53EF;&#x4EE5;&#x8BA9;&#x5B83;&#x91CD;&#x7F6E;&#x4E3A;&#x7A7A;&#xFF0C;&#x7136;&#x540E;&#x9875;&#x9762;&#x4E0A;&#x6709;&#x4E24;&#x4E2A;p&#x6807;&#x7B7E;&#x90FD;&#x5F15;&#x5230;&#x4E86;&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;&#xFF0C;&#x53EF;&#x4EE5;&#x628A;&#x53D8;&#x91CF;&#x6E32;&#x67D3;&#x51FA;&#x6765;&#xFF0C;HTML&#x4EE3;&#x7801;&#x5982;&#x4E0B;&#x1F447;&#xFF0C;&#x4E0B;&#x9762;&#x6211;&#x4EEC;&#x6765;&#x4E00;&#x6B65;&#x6B65;&#x628A;&#x8FD9;&#x4E2A;<code>Mvvm</code>&#x5BF9;&#x8C61;&#x7ED9;&#x5B9E;&#x73B0;&#x4E86;</p>
+<p><img src="&#x6700;&#x5C0F;mvvm&#x754C;&#x9762;.png" alt="&#x6700;&#x5C0F;mvvm&#x754C;&#x9762;"></p>
+<pre class="language-"><code class="lang-html"><span class="token doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>en<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>UTF-8<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">&gt;</span></span>mvvm<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>app<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>name<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>&#x8F93;&#x5165;&#x4F60;&#x670B;&#x53CB;&#x7684;&#x59D3;&#x540D;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>myFriend<span class="token punctuation">&quot;</span></span> <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>myFriend<span class="token punctuation">&quot;</span></span> <span class="token punctuation">/&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>reset<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>&#x91CD;&#x7F6E;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>1&#x3001;&#x6211;&#x8BA4;&#x8BC6; {{ myFriend }}&#xFF1B;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>2&#x3001;&#x6211;&#x7684;&#x670B;&#x53CB;&#x662F; {{ myFriend }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span>
+        var vm = new Mvvm({
+            el: &apos;#app&apos;,
+            data: {
+                myFriend: &apos;&#x5C0F;&#x660E;&apos;
+            },
+            methods: {
+                reset() {
+                    this.myFriend = &apos;&apos;
+                }
+            }
+        });
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span>
+</code></pre>
+<h2 id="&#x9996;&#x5148;&#x6211;&#x4EEC;&#x5148;&#x8981;&#x62E6;&#x622A;&#x5230;&#x6570;&#x636E;&#x53D8;&#x5316;"><a name="&#x9996;&#x5148;&#x6211;&#x4EEC;&#x5148;&#x8981;&#x62E6;&#x622A;&#x5230;&#x6570;&#x636E;&#x53D8;&#x5316;" class="anchor-navigation-ex-anchor" href="#&#x9996;&#x5148;&#x6211;&#x4EEC;&#x5148;&#x8981;&#x62E6;&#x622A;&#x5230;&#x6570;&#x636E;&#x53D8;&#x5316;"><i class="fa fa-link" aria-hidden="true"></i></a>1.1. &#x9996;&#x5148;&#x6211;&#x4EEC;&#x5148;&#x8981;&#x62E6;&#x622A;&#x5230;&#x6570;&#x636E;&#x53D8;&#x5316;</h2>
+<p>&#x5728;&#x524D;&#x7F6E;&#x77E5;&#x8BC6;&#x91CC;&#x6211;&#x4EEC;&#x77E5;&#x9053;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<code>Object.defineProperty</code>&#x6765;&#x7ED9;&#x53D8;&#x91CF;&#x8BBE;&#x7F6E;<code>getter</code>&#x548C;<code>setter</code>&#xFF0C;&#x6211;&#x4EEC;&#x8FD9;&#x91CC;&#x7528;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x5C01;&#x88C5;&#x4E00;&#x4E0B;&#x1F447;</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">function</span> <span class="token function">defineReactive</span> <span class="token punctuation">(</span><span class="token parameter">data<span class="token punctuation">,</span> key<span class="token punctuation">,</span> val</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Object<span class="token punctuation">.</span><span class="token function">defineProperty</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        enumerable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        configurable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        <span class="token function-variable function">get</span><span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// &#x5F85;&#x5904;&#x7406;</span>
+            <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token function-variable function">set</span><span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">newVal</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>value <span class="token operator">===</span> newVal<span class="token punctuation">)</span> <span class="token keyword">return</span>
+            <span class="token comment">// &#x5F85;&#x5904;&#x7406;</span>
+            value <span class="token operator">=</span> newVal
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token function">defineReactive</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>data<span class="token punctuation">,</span> <span class="token string">&apos;myFriend&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;&#x5C0F;&#x660E;&apos;</span><span class="token punctuation">)</span>
+</code></pre>
+<h2 id="&#x7531;&#x89C6;&#x56FE;&#x89E6;&#x53D1;&#x6570;&#x636E;&#x53D8;&#x66F4;"><a name="&#x7531;&#x89C6;&#x56FE;&#x89E6;&#x53D1;&#x6570;&#x636E;&#x53D8;&#x66F4;" class="anchor-navigation-ex-anchor" href="#&#x7531;&#x89C6;&#x56FE;&#x89E6;&#x53D1;&#x6570;&#x636E;&#x53D8;&#x66F4;"><i class="fa fa-link" aria-hidden="true"></i></a>1.2. &#x7531;&#x89C6;&#x56FE;&#x89E6;&#x53D1;&#x6570;&#x636E;&#x53D8;&#x66F4;</h2>
+<p>&#x5176;&#x5B9E;&#x5C31;&#x662F;&#x901A;&#x8FC7;&#x9875;&#x9762;&#x4E0A;&#x7ED1;&#x5B9A;&#x7684;&#x4E8B;&#x4EF6;&#x6765;&#x53D8;&#x66F4;&#x6570;&#x636E;&#xFF0C;&#x6BD4;&#x5982;input&#x8F93;&#x5165;&#x3001;&#x6309;&#x94AE;&#x70B9;&#x51FB;&#x56DE;&#x8C03;&#x3001;scroll&#x56DE;&#x8C03;&#x7B49;&#x3002;&#x6211;&#x4EEC;&#x6682;&#x65F6;&#x4E0D;&#x53BB;&#x5B9E;&#x73B0;&#x6307;&#x4EE4;&#xFF0C;&#x7559;&#x5F85;&#x540E;&#x9762;&#x53BB;&#x5B9E;&#x73B0;&#xFF0C;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x5148;&#x5FFD;&#x7565;<code>@click</code>&#x548C;<code>v-model</code>&#xFF0C;&#x5148;&#x76F4;&#x63A5;&#x53BB;&#x76D1;&#x542C;input&#x4E8B;&#x4EF6;&#x548C;click&#x4E8B;&#x4EF6;&#xFF0C;&#x7136;&#x540E;&#x53D8;&#x66F4;&#x6570;&#x636E;</p>
+<pre class="language-"><code class="lang-js">document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">&apos;input&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">&apos;input&apos;</span><span class="token punctuation">,</span> <span class="token parameter">e</span> <span class="token operator">=&gt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>myFriend <span class="token operator">=</span> e<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">&apos;button&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> <span class="token parameter">e</span> <span class="token operator">=&gt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>myFriend <span class="token operator">=</span> <span class="token string">&apos;&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h2 id="&#x7531;&#x6570;&#x636E;&#x53D8;&#x66F4;&#x89E6;&#x53D1;&#x89C6;&#x56FE;&#x66F4;&#x65B0;"><a name="&#x7531;&#x6570;&#x636E;&#x53D8;&#x66F4;&#x89E6;&#x53D1;&#x89C6;&#x56FE;&#x66F4;&#x65B0;" class="anchor-navigation-ex-anchor" href="#&#x7531;&#x6570;&#x636E;&#x53D8;&#x66F4;&#x89E6;&#x53D1;&#x89C6;&#x56FE;&#x66F4;&#x65B0;"><i class="fa fa-link" aria-hidden="true"></i></a>1.3. &#x7531;&#x6570;&#x636E;&#x53D8;&#x66F4;&#x89E6;&#x53D1;&#x89C6;&#x56FE;&#x66F4;&#x65B0;</h2>
+<p>&#x6570;&#x636E;&#x53D8;&#x66F4;&#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x8981;&#x8BA9;&#x89C6;&#x56FE;&#x4E0A;&#x5F15;&#x7528;&#x4E86;&#x8FD9;&#x4E9B;&#x6570;&#x636E;&#x7684;&#x5730;&#x65B9;&#x91CD;&#x65B0;&#x6E32;&#x67D3;&#x3002;&#x5728;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E0A;&#xFF0C;&#x9875;&#x9762;&#x91CC;&#x53EA;&#x6709;&#x4E24;&#x4E2A;p&#x6807;&#x7B7E;&#x4F7F;&#x7528;&#x4E86;<code>myFriend</code>&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;&#xFF0C;&#x5982;&#x679C;&#x6709;&#x66F4;&#x591A;&#x7684;&#x5730;&#x65B9;&#x4F7F;&#x7528;&#x5230;&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;&#x5462;&#xFF1F;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x628A;&#x6240;&#x6709;&#x4F7F;&#x7528;&#x5230;&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;&#x7684;&#x5730;&#x65B9;&#x90FD;&#x540C;&#x65F6;&#x66F4;&#x65B0;&#x3002;&#x6240;&#x4EE5;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x8981;&#x62C6;&#x5206;&#x6210;&#x4E24;&#x4E2A;&#x6B65;&#x9AA4;&#xFF0C;&#x7B2C;&#x4E00;&#x6B65;&#x662F;&#x628A;&#x9875;&#x9762;&#x4E0A;&#x5F15;&#x7528;&#x5230;&#x8BE5;&#x53D8;&#x91CF;&#x7684;&#x5730;&#x65B9;&#x90FD;&#x6536;&#x96C6;&#x8D77;&#x6765;&#xFF0C;&#x8FD9;&#x4E2A;&#x53EB;&#x505A;&#x6536;&#x96C6;&#x4F9D;&#x8D56;&#xFF0C;&#x6211;&#x4EEC;&#x5728;getter&#x4E2D;&#x6536;&#x96C6;&#x4F9D;&#x8D56;&#xFF0C;&#x7136;&#x540E;&#x7B49;&#x5230;&#x6570;&#x636E;&#x53D8;&#x5316;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x5728;setter&#x4E2D;&#x518D;&#x628A;&#x8FD9;&#x4E9B;&#x6536;&#x96C6;&#x5230;&#x7684;&#x4F9D;&#x8D56;&#x5FAA;&#x73AF;&#x89E6;&#x53D1;&#x4E00;&#x6B21;&#xFF0C;&#x8BA9;&#x9875;&#x9762;&#x66F4;&#x65B0;&#x3002;&#x5C31;&#x50CF;&#x4E0B;&#x9762;&#x8FD9;&#x6837;&#x1F447;</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">function</span> <span class="token function">defineReactive</span> <span class="token punctuation">(</span><span class="token parameter">data<span class="token punctuation">,</span> key<span class="token punctuation">,</span> val</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> dep <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// &#x4F9D;&#x8D56;&#x5217;&#x8868;</span>
+    Object<span class="token punctuation">.</span><span class="token function">defineProperty</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        enumerable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        configurable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        <span class="token function-variable function">get</span><span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            dep<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token comment">/* &#x5F15;&#x7528;&#x4E86;&#x8BE5;&#x53D8;&#x91CF;&#x7684;&#x9875;&#x9762;&#x8282;&#x70B9; */</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token function-variable function">set</span><span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">newVal</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>value <span class="token operator">===</span> newVal<span class="token punctuation">)</span> <span class="token keyword">return</span>
+            value <span class="token operator">=</span> newVal
+            dep<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">node</span> <span class="token operator">=&gt;</span> <span class="token comment">/* &#x904D;&#x5386;&#x4F9D;&#x8D56;&#x4E2D;&#x7684;&#x5143;&#x7D20;&#x8282;&#x70B9;&#x7136;&#x540E;&#x6E32;&#x67D3; */</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token function">defineReactive</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>data<span class="token punctuation">,</span> <span class="token string">&apos;myFriend&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;&#x5C0F;&#x660E;&apos;</span><span class="token punctuation">)</span>
+</code></pre>
+<h2 id="&#x5B9E;&#x73B0;mvvm&#x7C7B;"><a name="&#x5B9E;&#x73B0;mvvm&#x7C7B;" class="anchor-navigation-ex-anchor" href="#&#x5B9E;&#x73B0;mvvm&#x7C7B;"><i class="fa fa-link" aria-hidden="true"></i></a>1.4. &#x5B9E;&#x73B0;mvvm&#x7C7B;</h2>
+<p>&#x7406;&#x89E3;&#x4E0A;&#x9762;&#x9700;&#x8981;&#x7684;&#x6838;&#x5FC3;&#x529F;&#x80FD;&#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x53BB;&#x601D;&#x8003;&#x5982;&#x4F55;&#x5B9E;&#x73B0;<code>mvvm</code>&#x8FD9;&#x4E2A;&#x7C7B;&#x4E86;&#xFF0C;&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x9700;&#x8981;&#x5B83;&#x5B9E;&#x73B0;&#x4E0B;&#x9762;&#x8FD9;&#x51E0;&#x4E2A;&#x57FA;&#x7840;&#x529F;&#x80FD;</p>
+<ul>
+<li>&#x6302;&#x8F7D;&#x5728;<code>#app</code>&#x4E0B;&#xFF0C;&#x76F4;&#x767D;&#x8BF4;&#x5C31;&#x662F;&#x8981;&#x628A;<code>#app</code>&#x4E0B;&#x6240;&#x6709;&#x7684;&#x5927;&#x62EC;&#x53F7;&#x63D2;&#x503C;&#x53D8;&#x91CF;&#x505A;&#x5173;&#x8054;</li>
+<li>&#x628A;<code>data</code>&#x4EE3;&#x7406;&#x5230;&#x81EA;&#x8EAB;&#xFF0C;&#x6BD4;&#x5982;&#x6211;&#x4EEC;&#x5728;vue&#x4E2D;&#x66F4;&#x5E38;&#x7528;&#x7684;&#x662F;&#x901A;&#x8FC7;<code>this.myFriend</code>&#x800C;&#x4E0D;&#x662F;&#x901A;&#x8FC7;<code>this.data.myFriend</code>&#x53BB;&#x83B7;&#x53D6;&#x53D8;&#x91CF;</li>
+<li>&#x83B7;&#x53D6;&#x6307;&#x4EE4;&#x5E76;&#x548C;&#x53D8;&#x91CF;&#x505A;&#x5173;&#x8054;</li>
+<li>&#x5B9E;&#x73B0;&#x53D8;&#x91CF;&#x7684;&#x4F9D;&#x8D56;&#x6536;&#x96C6;&#x548C;&#x4F9D;&#x8D56;&#x66F4;&#x65B0;</li>
+</ul>
+<p>&#x7B80;&#x5355;&#x7248;&#x5B9E;&#x73B0;&#x5982;&#x4E0B;&#x1F447;</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">class</span> <span class="token class-name">Mvvm</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token parameter">options</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> el<span class="token punctuation">,</span> data<span class="token punctuation">,</span> methods <span class="token punctuation">}</span> <span class="token operator">=</span> options<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>methods <span class="token operator">=</span> methods<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">observe</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">compile</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span>el<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">observe</span><span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> key <span class="token keyword">in</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">defineReactive</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> key<span class="token punctuation">,</span> data<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">defineReactive</span><span class="token punctuation">(</span><span class="token parameter">data<span class="token punctuation">,</span> key<span class="token punctuation">,</span> value</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> dep <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    Object<span class="token punctuation">.</span><span class="token function">defineProperty</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      enumerable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      configurable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token function-variable function">get</span><span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                dep<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>target<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token function-variable function">set</span><span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">newVal</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">===</span> newVal<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+                value <span class="token operator">=</span> newVal<span class="token punctuation">;</span>
+        dep<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">watcher</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                    watcher<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+                <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">compile</span><span class="token punctuation">(</span><span class="token parameter">dom</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> nodes <span class="token operator">=</span> dom<span class="token punctuation">.</span>childNodes<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> node <span class="token keyword">of</span> nodes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> attrs <span class="token operator">=</span> node<span class="token punctuation">.</span>attributes <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+      <span class="token comment">// &#x89E3;&#x6790;&#x6307;&#x4EE4;</span>
+      <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> attr <span class="token keyword">of</span> attrs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">switch</span> <span class="token punctuation">(</span>attr<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">case</span> <span class="token string">&quot;v-model&quot;</span><span class="token punctuation">:</span>
+            node<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span>
+              <span class="token string">&quot;input&quot;</span><span class="token punctuation">,</span>
+              <span class="token parameter">e</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                                <span class="token keyword">this</span><span class="token punctuation">[</span>attr<span class="token punctuation">.</span>value<span class="token punctuation">]</span> <span class="token operator">=</span> e<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value
+                            <span class="token punctuation">}</span>
+            <span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">this</span><span class="token punctuation">.</span>target <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Watcher</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> <span class="token string">&quot;input&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">this</span><span class="token punctuation">[</span>attr<span class="token punctuation">.</span>value<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+          <span class="token keyword">case</span> <span class="token string">&quot;@click&quot;</span><span class="token punctuation">:</span>
+            node<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">&quot;click&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span>
+              <span class="token keyword">this</span><span class="token punctuation">.</span>methods<span class="token punctuation">[</span>attr<span class="token punctuation">.</span>value<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
+            <span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+
+            <span class="token keyword">let</span> match <span class="token operator">=</span> <span class="token punctuation">(</span>node<span class="token punctuation">.</span>innerText <span class="token operator">||</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token regex">/\{\{(.*)\}\}/</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>match<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">const</span> name <span class="token operator">=</span> match<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>target <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Watcher</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> <span class="token string">&quot;text&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">this</span><span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Watcher</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token parameter">node<span class="token punctuation">,</span> type</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>node <span class="token operator">=</span> node<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>type <span class="token operator">=</span> type<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>template <span class="token operator">=</span> node<span class="token punctuation">.</span>innerText<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token function">update</span><span class="token punctuation">(</span><span class="token parameter">value</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> <span class="token string">&quot;input&quot;</span><span class="token punctuation">:</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>node<span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token keyword">case</span> <span class="token string">&quot;text&quot;</span><span class="token punctuation">:</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>node<span class="token punctuation">.</span>innerText <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>template<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token regex">/\{\{(.*)\}\}/g</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8FD9;&#x91CC;&#x6709;&#x51E0;&#x4E2A;&#x4E2A;&#x5730;&#x65B9;&#x8981;&#x5355;&#x72EC;&#x8BF4;&#x4E00;&#x4E0B;&#xFF1A;</p>
+<ul>
+<li>&#x7B2C;&#x4E00;&#x4E2A;&#x662F;&#x62BD;&#x8C61;&#x4E86;&#x4E00;&#x4E2A;<code>watcher</code>&#x7C7B;&#xFF0C;&#x5728;&#x8FD9;&#x4E2A;demo&#x91CC;&#x9762;&#x6570;&#x636E;&#x53EA;&#x662F;&#x88AB;&#x4E24;&#x4E2A;&#x6807;&#x7B7E;&#x4E2D;&#x7684;&#x6A21;&#x677F;&#x53D8;&#x91CF;&#x5F15;&#x7528;&#x4E86;&#xFF0C;&#x4F46;&#x662F;&#x5728;<code>vue</code>&#x4E2D;&#x5176;&#x5B9E;&#x8FD8;&#x6709;&#x7528;&#x6237;&#x81EA;&#x8EAB;&#x5B9A;&#x4E49;&#x7684;<code>watch</code>&#x4E5F;&#x4F1A;&#x5728;&#x6570;&#x636E;&#x53D8;&#x66F4;&#x7684;&#x65F6;&#x5019;&#x89E6;&#x53D1;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x7684;&#x56DE;&#x8C03;&#x3002;<code>Wather</code>&#x5176;&#x5B9E;&#x626E;&#x6F14;&#x7684;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x4E2D;&#x4ECB;&#x7684;&#x89D2;&#x8272;&#xFF0C;&#x6570;&#x636E;&#x53D8;&#x5316;&#x7684;&#x65F6;&#x5019;&#x53EA;&#x8981;&#x544A;&#x8BC9;<code>watcher</code>&#xFF0C;<code>watcher</code>&#x81EA;&#x5DF1;&#x53BB;&#x901A;&#x77E5;&#x5F15;&#x7528;&#x5230;&#x8FD9;&#x4E2A;&#x6570;&#x636E;&#x7684;&#x5176;&#x4ED6;&#x5730;&#x65B9;&#x3002;</li>
+<li>&#x7B2C;&#x4E8C;&#x4E2A;&#x662F;<code>target</code>&#x7684;&#x5DE7;&#x5999;&#x8FD0;&#x7528;&#xFF0C;<code>compile</code>&#x53BB;&#x89E3;&#x6790;&#x6A21;&#x677F;&#x7684;&#x65F6;&#x5019;&#x628A;&#x83B7;&#x53D6;&#x5230;&#x6BCF;&#x4E00;&#x4E2A;&#x4F9D;&#x8D56;&#x8D4B;&#x7ED9;&#x4E00;&#x4E2A;&#x5168;&#x5C40;&#x6027;&#x7684;<code>target</code>&#xFF0C;&#x7136;&#x540E;&#x53BB;&#x624B;&#x52A8;&#x8C03;&#x4E00;&#x4E0B;&#x89E6;&#x53D1;&#x4E00;&#x4E0B;&#x5F15;&#x7528;&#x53D8;&#x91CF;&#x7684;<code>getter</code>&#xFF0C;&#x5728;<code>getter</code>&#x91CC;&#x9762;&#x63A5;&#x6536;&#x5F53;&#x524D;&#x7684;<code>target</code>&#x4ECE;&#x800C;&#x5B8C;&#x6210;&#x6574;&#x4E2A;&#x4F9D;&#x8D56;&#x6536;&#x96C6;&#x7684;&#x8FC7;&#x7A0B;&#x3002;</li>
+<li><code>Dep</code>&#x5176;&#x5B9E;&#x5E94;&#x8BE5;&#x5355;&#x72EC;&#x62BD;&#x8C61;&#x51FA;&#x6765;&#xFF0C;&#x76EE;&#x524D;&#x8FD8;&#x662F;&#x8026;&#x5408;&#x5728;&#x4E00;&#x8D77;</li>
+</ul>
+<p>&#x7ECF;&#x8FC7;&#x4E0A;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x6211;&#x4EEC;&#x5C31;&#x77E5;&#x9053;&#x4E86;&#x4E00;&#x4E2A;&#x6838;&#x5FC3;&#x7684;MVVM&#x8981;&#x5B9E;&#x73B0;&#x7684;&#x529F;&#x80FD;&#x4EE5;&#x53CA;&#x6838;&#x5FC3;&#x601D;&#x8DEF;&#xFF0C;&#x7136;&#x540E;&#x6211;&#x4EEC;&#x518D;&#x53BB;&#x770B;Vue&#x7684;&#x8FD9;&#x5757;&#x54CD;&#x5E94;&#x5F0F;&#x7684;&#x6E90;&#x7801;&#x5C31;&#x6BD4;&#x8F83;&#x6709;&#x601D;&#x8DEF;&#x4E86;&#x3002;&#x672C;&#x8282;&#x7684;&#x540E;&#x9762;&#x6211;&#x4F1A;&#x53C2;&#x8003;Vue&#x6E90;&#x7801;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x529F;&#x80FD;&#x6BD4;&#x8F83;&#x5B8C;&#x6574;&#x7684;MVVM&#x3002;</p>
+<footer class="page-footer"><span class="copyright">powered by Gitbook</span><span class="footer-modification">&#x8BE5;&#x6587;&#x4EF6;&#x4FEE;&#x8BA2;&#x65F6;&#x95F4;&#xFF1A;
+2019-08-25 23:38:31
+</span></footer>
+
+<link rel="stylesheet" href="https://ifengzp.github.io/vue-review/assets/gitalk/gitalk.css">
+
+<script src="https://ifengzp.github.io/vue-review/assets/gitalk/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script src="https://ifengzp.github.io/vue-review/assets/gitalk/gitalk-config.js"></script>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="前置知识.html" class="navigation navigation-prev " aria-label="Previous page: 前置知识">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../模板系统/实现一个模板引擎.html" class="navigation navigation-next " aria-label="Next page: 最小模板系统">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"最小mvvm","level":"3.2","depth":1,"next":{"title":"最小模板系统","level":"5.1","depth":1,"path":"模板系统/实现一个模板引擎.md","ref":"模板系统/实现一个模板引擎.md","articles":[]},"previous":{"title":"前置知识","level":"3.1","depth":1,"path":"响应式系统/前置知识.md","ref":"响应式系统/前置知识.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-plus","-highlight","prism","github@^2.0.0","github-buttons@2.1.0","favicon@^0.0.2","todo@^0.1.3","edit-link@^2.0.2","tbfed-pagefooter@^0.0.1","advanced-emoji","splitter","mermaid-gb3","puml","-sharing","sectionx","anchors","copy-code-button","theme-comscore","expandable-chapters","anchor-navigation-ex"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"prism":{"css":["prismjs/themes/prism-okaidia.css"]},"github":{"url":"https://github.com/ifengzp/vue-review"},"puml":{},"todo":{},"splitter":{},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{"tag":"b"},"mermaid-gb3":{},"anchor-navigation-ex":{"associatedWithSummary":true,"float":{"floatIcon":"fa fa-navicon","level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showGoTop":true,"showLevel":true},"favicon":{"shortcut":"favicon.ico","bookmark":"favicon.ico"},"theme-comscore":{},"github-buttons":{"repo":"ifengzp/vue-review","types":["star"],"size":"small"},"copy-code-button":{},"advanced-emoji":{"embedEmojis":false},"edit-link":{"label":"编辑本页","base":"https://github.com/ifengzp/vue-review/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"aaron","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"解读 Vue","language":"zh-hans","output.name":"site","gitbook":"3.2.3","description":"记录学习Vue和阅读Vue源码过程中的疑问和收获"},"file":{"path":"响应式系统/最小mvvm.md","mtime":"2019-08-25T15:38:31.699Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-08-25T15:55:01.688Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-plus/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-plus/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-mermaid-gb3/book/plugin.js"></script>
+        
+    
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sectionx/sectionx.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-theme-comscore/test.js"></script>
+        
+    
+
+    <script src="../gitbook/gitbook-plugin-mermaid-gb3/mermaid/mermaid.min.js"></script>
+
+    </body>
+</html>
+
